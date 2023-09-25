@@ -1,0 +1,650 @@
+<style>
+	.mat-mdc-list-item-icon {
+  color: rgba(0, 0, 0, 0.54);
+}
+.example-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.example-full-width {
+  width: 100%;
+}
+.listborder{
+
+    border-bottom-color: deepskyblue;
+    border-left: groove;
+    border-left-color: deepskyblue;
+    border-top: groove;
+    border-top-color: tan;
+    border-right: groove;
+    border-right-color: deepskyblue;
+	border-bottom-style: dotted;
+}
+.example-tab-icon {
+  margin-right: 8px;
+}
+
+</style>
+<body>
+<div fxFlex.gt-sm="100%" fxFlex="100" class="page-container"  >
+    <mat-card style="background: inherit;" class="example-card ">
+		
+			<div class="image-container">
+				<img src="./assets/TANGEDCO-Logo.jpg" class="card-image">
+			</div>
+			<br>
+			<mat-card-title style="color: brown; text-align: center;">
+				RENEWABLE ENERGY NAME TRANSFER APPLICATION
+			</mat-card-title>
+		
+			<mat-card-content style="width: 100%;">
+		
+				<div style="margin-left: 38%;">
+		
+					<mat-form-field class="ml-xs mr-xs" fxFlex.gt-sm="100%">
+						<input (keydown)="numberFormat($event)" type="text" onKeyPress="if(this.value.length==12) return false;" matInput placeholder="Service No" [(ngModel)]="mCompServNumber" readonly>
+					</mat-form-field>
+		
+					<mat-card-actions style="margin-right: 62%;" >
+						<button *ngIf="!IsSavedOnce" mat-raised-button style="background-color: #7f94e1;" (click)="getGenDetails()">Apply<mat-icon>ads_click</mat-icon></button>
+					</mat-card-actions>
+		
+				</div>
+		
+				<div *ngIf="remarksavailable">
+					<p>
+						Application Has been Returned from NCES:
+						{{ApplicationDetails.applRemarks}}
+					</p>
+				</div>
+
+				<div *ngIf="ApplicationDetails.applStatus === 'APPROVAL ISSUED'">
+					<ng-template mat-tab-label>
+					  <mat-icon class="example-tab-icon">file_upload</mat-icon>
+					  Upload Approval
+					</ng-template>
+					<div class="flex-container">
+					 
+					  <ng-container >
+						<div matListItemLine style="font-size: large; font-family: serif;">
+						  Download Order Copy
+						
+						
+						  
+						  <button mat-mini-fab color="primary" (click)="downloadOrderCopy('DOCOA17')" aria-label="Preview">
+							<mat-icon>file_download</mat-icon>
+						  </button>
+						</div>
+						
+					  </ng-container>
+					</div><br>
+					<div class="flex-container">
+					
+					  <ng-container>
+						<div matListItemLine style="font-size: large; font-family: serif;">
+						Download Dfc Recipt
+						
+						
+						  
+						  <button mat-mini-fab color="primary" (click)="downloadOrderCopy('DOCOA18')" aria-label="Preview">
+							<mat-icon>file_download</mat-icon>
+						  </button>
+						</div>
+						
+						
+					  </ng-container>
+					  
+					</div><br>
+					
+				</div>
+			</mat-card-content>
+		
+	 <mat-tab-group class=".page-container" #tabGroup>
+
+		<mat-tab label="DETAILS"> 
+			<ng-template mat-tab-label>
+				<mat-icon class="example-tab-icon">dynamic_form</mat-icon>
+				Application Details
+			  </ng-template>
+			<div class="mat-elevation-z8" >
+				
+				<mat-card-content>
+				<div fxLayout="row" fxLayoutAlign="start center">
+			<mat-chip-list
+               class="example-chip"
+               cdkDropList 
+               cdkDropListOrientation="horizontal"
+               (cdkDropListDropped)="drop($event)" style="margin-left: 20%;margin-right: 20%;">
+			  
+			   <mat-chip class="example-box" cdkDrag>
+				<strong>Company Name :</strong>
+                {{ApplicationDetails.serviceExsitingName}}
+              </mat-chip>
+			   <mat-chip class="example-box" cdkDrag >
+				<strong>Service No: </strong>{{ApplicationDetails.serviceNo}}
+			  </mat-chip>
+			  <mat-chip class="example-box" cdkDrag>
+				<strong>Category :</strong>
+				{{
+				  ApplicationDetails.flowtype === 'STB' ? 'SaleToBoard'
+				  : (ApplicationDetails.flowtype === 'IS-CAPTIVE' ? 'Captive'
+					: (ApplicationDetails.flowtype === 'THIRD-PARTY' ? 'ThirdParty' : ''))
+				}}
+			  </mat-chip>
+			  
+			  <mat-chip class="example-box" cdkDrag >
+				<strong>RE Type :</strong>
+                {{ApplicationDetails.fuelTypeCode}}
+              </mat-chip>
+             <mat-chip class="example-box" cdkDrag>
+				<strong>Scheme Type :</strong>
+				{{ ApplicationDetails.isRec === 'Y' ? 'REC' : (ApplicationDetails.isRec === 'N' ? 'NON-REC' : '') }}
+              </mat-chip>
+			  <mat-chip class="example-box" cdkDragcdkDrag >
+				<strong> Date Of Commissioning :</strong>
+                {{ApplicationDetails.dateOfCommission}}
+			</mat-chip>
+			<mat-chip class="example-box" cdkDragcdkDrag >
+			    <strong> Injection Voltage:</strong>
+                {{ApplicationDetails.injectionVoltage}}
+			</mat-chip>
+			<mat-chip class="example-box" cdkDragcdkDrag >
+				<strong> Name Of The Substation :</strong>
+                {{ApplicationDetails.substationName}}
+			</mat-chip>
+			  
+			  <mat-chip class="example-box" cdkDrag>
+				<strong>Capacity :</strong>
+                {{ApplicationDetails.capacity}}&nbsp;M/w
+              </mat-chip>
+			  <mat-chip class="example-box" cdkDrag>
+				<strong>Agreement Valid Upto:</strong>
+                {{ApplicationDetails.aggrementValidityDate}}
+              </mat-chip>
+			  
+              </mat-chip-list>
+			  
+				  </div>
+				  
+				  
+				  <div fxLayout="row" style="color: brown;" fxLayoutAlign="start center">
+                    <mat-card-title>
+                        APPLICATION DETAILS
+                   </mat-card-title><br><br><br>
+                  </div>
+                  <div fxLayout="row" fxLayoutAlign="start center" style="align-items: center;">
+					
+					<mat-form-field class="example-full-width strong-form-field ml-xs mr-xs" style="width: 25%;">
+						<mat-select style="width: 100%;" placeholder="TYPE OF APPLICATION" [(ngModel)]='ApplicationDetails.typeofappl' [disabled]="disableControls" required (ngModelChange)="onValueChange($event)">
+						  <mat-option *ngFor="let typeofappl of TypeOfApplication" [value]="typeofappl.code">
+							{{typeofappl.name}}
+						  </mat-option>
+						</mat-select>
+					  </mat-form-field>
+					<mat-form-field class="example-full-width strong-form-field ml-xs mr-xs" style="width: 50%;">
+						<input  matInput placeholder="ENTER NEW NAME" [(ngModel)]='ApplicationDetails.serviceNewName' [readonly]="disableControls " required>
+					  </mat-form-field>
+			
+                      <mat-form-field   *ngIf="flowtypeshow" class="example-full-width strong-form-field ml-xs mr-xs" style="width: 25%;">
+						<mat-select  style="width: 100%;" placeholder="ENTER CATEGORY" [(ngModel)]='ApplicationDetails.applFlowType' [disabled]="disableControls  || dissableflowtypchange" required>
+							<mat-option *ngFor="let flow of FlowtypeList" [value]="flow.code">
+								 {{flow.name}}
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
+
+					<mat-form-field class="example-full-width strong-form-field ml-xs mr-xs" style="width: 25%;">
+						<mat-select  style="width: 100%;" placeholder="ENTER SCHEME" [(ngModel)]='ApplicationDetails.applScheme' [disabled]="disableControls || dissableflowtypchange || ApplicationDetails.isRec =='N' " required>
+							<mat-option *ngFor="let Scheme of SchemeType" [value]="Scheme.code">
+								 {{Scheme.name}}
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
+                </div> 
+				<div fxLayout="row" style="color: brown;" fxLayoutAlign="start center">
+                    <mat-card-title>
+                        ENTER NEW GENERATOR DEATILS 
+                   </mat-card-title><br><br><br>
+                  </div>
+			
+			
+				<mat-card-actions  style="margin-right: 0%;">
+					<p *ngIf="!IsSavedOnce">CLICK HERE TO ENTER NEW GENERATOR DETAIL TO PROCCEED WITH APPLICATION ->
+                    <button mat-raised-button  style="background-color: #7f94e1;" (click)="NewGenDeatils()" [disabled]="disableControls"  ><mat-icon>ads_click</mat-icon>EnterNewGenDetails</button>
+				</p>
+				<p *ngIf="IsSavedOnce">CLICK HERE TO VIEW AND UPDATE NEW GENERATOR DETAILS ->
+                    <button mat-raised-button  style="background-color: #7f94e1;" (click)="UpdateNewGenDetails()" [disabled]="disableControls" ><mat-icon>ads_click</mat-icon>EnterNewGenDetails</button>
+				</p>
+				</mat-card-actions>
+				<mat-card-actions style="margin-right: 40%;" *ngIf="!IsSavedOnce">
+					<button mat-raised-button  style="background-color: #7f94e1;" (click)="savedetails()" [disabled]="disableControls || !disablesave" ><mat-icon >save</mat-icon>SAVE</button>
+                    <!-- <button mat-raised-button  style="background-color: #7f94e1;" (click)="getGenDetails()" [disabled]="disableControls"><mat-icon >restore</mat-icon>RESET</button> -->
+               NOTE : PLEASE UPDATE THE NEW GENERATORS DETAILS ABOVE AND SAVE THIS PAGE ONCE TO PROCEED WITH APPLICATION.
+				</mat-card-actions>
+				<mat-card-actions style="margin-right: 40%;" *ngIf="IsSavedOnce">
+               NOTE : APPLICATION IS ALREADY SAVED ONCE. 
+				</mat-card-actions>
+               
+			</mat-card-content>
+				
+ </div>
+
+
+	</mat-tab>
+
+
+	<mat-tab *ngIf="ApplicationDetails.flowtype !='STB' && IsSavedOnce " label="BUYER DETAILS" style="background:  inherit;" > 
+		<ng-template mat-tab-label>
+			<mat-icon class="example-tab-icon">description</mat-icon>
+			Buyer Details
+		  </ng-template>
+		<mat-card-content >
+			<div>
+				
+				<mat-card style= "background: inherit;"class="custom-datatable">
+					<mat-card-title >
+						<Strong >Quantum {{
+							ApplicationDetails.flowtype === 'STB' ? 'SaleToBoard'
+							: (ApplicationDetails.flowtype === 'IS-CAPTIVE' ? 'Captive'
+							  : (ApplicationDetails.flowtype === 'THIRD-PARTY' ? 'ThirdParty' : ''))
+						  }} Allocation for HT User</Strong>
+					</mat-card-title>
+					<mat-card-content > 
+						
+						<!-- <ngx-datatable tabindex="index" [rows]="gc.captiveQuantumAllocation" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="0" [rowHeight]="'auto'">
+				
+				
+
+							<ngx-datatable-column name="ID" class="datatable-header-cell">
+				
+								<ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+								<strong>{{row.$$index + 1}}</strong>
+								</ng-template>
+							</ngx-datatable-column>
+							<ngx-datatable-column name="CompanyName" >
+								<ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+									
+								</ng-template>
+							</ngx-datatable-column>
+							<ngx-datatable-column name="HT Service No" >
+				
+								<ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+									<strong >{{row.buyerCompServiceNumber}}</strong>
+								</ng-template>
+							</ngx-datatable-column>
+
+							<ngx-datatable-column name="Distribution Circle" >
+				
+								<ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+								<strong >{{row.buyerOrgName}}</strong>
+								</ng-template>
+							</ngx-datatable-column>
+							<ngx-datatable-column name="Share Percentage" >
+								<ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+									<strong >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{row.sharePercentage}}</strong>
+								</ng-template>
+							</ngx-datatable-column>
+
+							<ngx-datatable-column name="Quantum Allocation in MW" >
+								<ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+									<strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{row.quantum}}</strong>
+								</ng-template>
+							</ngx-datatable-column> -->
+				
+						  <!--  <ngx-datatable-column name="Injection Voltage">
+								<ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+									{{row.injectionVoltageName}}
+								</ng-template>
+							</ngx-datatable-column> -->
+
+							<!-- <ngx-datatable-column name="Actions" >
+				
+								<ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+									<button mat-raised-button mat-icon-button mat-button-sm (click)="editCaptiveQuantumAllocation(row.$$index)" [disabled]="disableControls"><mat-icon>mode_edit</mat-icon></button>
+									<button mat-raised-button mat-icon-button mat-button-sm (click)="deleteCaptiveQuantumAllocation(row.$$index)" [disabled]="disableControls"><mat-icon>delete</mat-icon></button>
+								</ng-template>
+							</ngx-datatable-column>
+							
+						</ngx-datatable> -->
+
+
+						<table id="table" style="float: center; border:1;width: 100%;">     
+							<tr>
+								<th>S.NO</th>
+								<th>Company Name</th>
+								<th>Service No</th>
+								<th>Circle Name</th>	
+								<th>Traiff</th>
+								<th>Share Percentage</th>
+								<th>Quantum</th>	
+								<th colspan="2">Actions</th>			
+							</tr>
+							<tr *ngFor="let row of gc.captiveQuantumAllocation;let i=index;">  
+								<td style="text-align: center;">{{i+1}}</td> 
+								<td style="text-align: center;"><strong >{{row.captiveCompanyName}}</strong></td>  
+								<td style="text-align: center;"><strong >{{row.buyerCompServiceNumber}}</strong></td>  
+								<td style="text-align: center;"><strong >{{row.buyerOrgName}}</strong></td> 
+								<td style="text-align: center;"><strong ></strong></td> 
+								<td style="text-align: center;"><strong >{{row.sharePercentage}}</strong></td>
+								<td style="text-align: center;"><strong >{{row.quantum}}</strong></td>
+								<td style="text-align: center;"><button mat-raised-button mat-icon-button mat-button-sm (click)="editCaptiveQuantumAllocation(i)" [disabled]="disableControls"><mat-icon>mode_edit</mat-icon></button></td>
+								<td style="text-align: center;"><button mat-raised-button mat-icon-button mat-button-sm (click)="deleteCaptiveQuantumAllocation(row.$$index)" [disabled]="disableControls"><mat-icon>delete</mat-icon></button></td>
+							
+							</tr>   
+							<!-- <tr>
+								<td colspan="3" style="text-align: right;color: blanchedalmond;"><b>Total:</b></td>
+								<td style="text-align: center;color: blanchedalmond;"><strong>{{ApplicationDetails.totalCharges}}</strong></td>
+							</tr><br>
+							<tr>
+							<td colspan="3"></td>
+								<td  style="text-align: center;color: blanchedalmond;">
+									<button mat-raised-button style="background-color: cornflowerblue;" class="primary"(click)="DownloadPayment()"><mat-icon>cloud_download</mat-icon>DownloadRecipt</button>
+									<button mat-raised-button style="background-color: cornflowerblue;" class="primary"(click)="Banklistfetch()">PayNow</button>
+									<button mat-raised-button style="background-color: cornflowerblue;" class="primary"(click)="DownloadPayedBill()"><mat-icon>cloud_download</mat-icon>DownloadPayedBill</button>
+								</td>
+							</tr> -->
+						</table>
+					
+				<div #scrollTarget>
+						
+							<mat-card  style= "background-color: inherit;">
+							<mat-card-title>
+								<Strong>{{quantumAllocationRowIndex>-1?'Update':'Add'}} HT user with Quantum details</Strong>
+							</mat-card-title>
+						 <mat-card-content>
+							<mat-form-field  fxFlex.gt-sm="100%" class="example-full-width strong-form-field">
+								<mat-select  style="width: 100%;color: #ff0000;" [disabled]="disablebuyer" (change)="fetchBuyerCompanyServices(quantumAllocation.buyerOrgId)" placeholder="Distribution Circle/EDC name" [(ngModel)]='quantumAllocation.buyerOrgId'>
+								  <mat-option *ngFor="let org of orgList " [value]="org.code">
+									{{org.code}} - {{org.name}}
+								  </mat-option>
+								</mat-select>
+							  </mat-form-field>
+							  
+				
+							  <!-- <mat-form-field class="ml-xs mr-xs" fxFlex.gt-sm="100%">
+								<mat-select class="ml-xs mr-xs" style="width: 100%;" placeholder="HT Service No" [(ngModel)]='quantumAllocation.buyerCompServiceId' (ngModelChange)="onConsumerChange()">
+								  <mat-option *ngFor="let key of getObjectKeys(buyerCompanyServices)" [value]="buyerCompanyServices[key].serviceId">
+									{{ buyerCompanyServices[key].serviceNumber }}
+								  </mat-option>
+								</mat-select>
+							  </mat-form-field> -->
+
+							  <mat-form-field class="example-full-width strong-form-field">
+								
+								<input type="text"
+									   aria-label="Number"
+									   placeholder="HT Service No" 
+									   [(ngModel)]='quantumAllocation.buyerCompServiceNumber' 
+									   (ngModelChange)="onConsumerChange()"
+									   matInput
+									   [formControl]="myControl"
+									   [matAutocomplete]="auto" [readonly]="disablebuyer">
+								<mat-autocomplete #auto="matAutocomplete">
+								  <mat-option *ngFor="let option of filteredOptions | async" [value]="option.serviceNumber">
+									{{option.serviceNumber}}
+								  </mat-option>
+								</mat-autocomplete>
+							  </mat-form-field>
+							  
+								<mat-form-field class="ml-xs mr-xs" style="width: 100%;" class="example-full-width strong-form-field">
+									<input matInput placeholder="Captive Company Name"  [disabled]="true"  [(ngModel)]='quantumAllocation.captiveCompanyName' (ngModelChange)="onConsumerChange()" >
+								</mat-form-field>
+								<mat-form-field class="ml-xs mr-xs" style="width: 100%;" class="example-full-width strong-form-field">
+									<input matInput placeholder="Quantum of Allocation in MW" [(ngModel)]='quantumAllocation.quantum' >
+								</mat-form-field>
+								
+								
+						   
+								<mat-form-field class="ml-xs mr-xs" style="width: 100%;" class="example-full-width strong-form-field">
+									<input matInput placeholder="Drawal Voltage"  [disabled]="true"  [(ngModel)]='quantumAllocation.drawalVoltageName' (ngModelChange)="onConsumerChange()" >
+								</mat-form-field>
+								<mat-form-field class="ml-xs mr-xs" style="width: 100%;" class="example-full-width strong-form-field">
+									<input (keydown)="numberFormat($event)" type="text"  onKeyPress="if(this.value.length==2) return false;" matInput placeholder="Share Percentage" [(ngModel)]='quantumAllocation.sharePercentage' >
+								</mat-form-field>
+								
+							</mat-card-content>
+							<mat-card-actions style="margin-right: 62%;" >
+								<button mat-raised-button (click)="quantumAllocationRowIndex>-1?updateCaptiveQuantumAllocation():addCaptiveQuantumAllocation()" [disabled]="disableControls">{{quantumAllocationRowIndex>-1?'Update':'Add'}}</button>
+								<button mat-raised-button (click)="initCaptiveQuantumAllocation()" [disabled]="disableControls">Reset</button>
+								<button mat-raised-button color="primary" class="primary" (click)="savedetails()" [disabled]="disableControls">SAVE</button>
+							</mat-card-actions>
+						</mat-card>
+					</div>
+				
+					</mat-card-content> 
+				</mat-card>
+			
+
+
+			</div>
+			
+			
+		</mat-card-content>
+	</mat-tab>
+
+
+		
+		
+		<mat-tab *ngIf="IsSavedOnce" label="FILE UPLOAD"> 
+			<ng-template mat-tab-label>
+				<mat-icon class="example-tab-icon">drive_folder_upload</mat-icon>
+				File Upload
+			  </ng-template>
+			<div>
+				<mat-list>
+					<div mat-subheader>Please Upload the mandatory file to submit the Application*</div>
+					
+					
+					<mat-list-item *ngFor="let folder of folders" class="listborder">
+					  <ng-container *ngIf="folder.docCode === 'DOCOA08' || folder.docCode === 'DOCOA09' || folder.docCode === 'DOCOA1'">
+						<div matListItemLine style="width: 80%; font-size: large; font-family: serif;">{{ folder.docName }}*</div>
+					  </ng-container>
+					  
+					  <ng-container *ngIf="folder.docCode !== 'DOCOA08' && folder.docCode !== 'DOCOA09' && folder.docCode !== 'DOCOA1'">
+						<div matListItemLine style="width: 80%; font-size: large; font-family: serif;">{{ folder.docName }}</div>
+					  </ng-container>
+					  
+					  <ng-container *ngIf="folder.isUploaded === 'false'">
+						<div matListItemLine>
+						  <input type="file" id="fileInput" (change)="selectFile($event, folder)" name="fileInput" />
+						</div>
+						<div matListItemLine>
+						  <button mat-raised-button color="primary" (click)="upload(folder)">Upload</button>
+						</div>
+					  </ng-container>
+					  
+					  <ng-container *ngIf="folder.isUploaded === 'true'">
+						<div matListItemLine style="font-size: large; font-family: serif;">
+						  <p>Uploaded</p>
+						</div>
+						<div matListItemLine style="width: 20%;">
+						  <button style="margin-left: 5%; color: green;" mat-mini-fab aria-label="Check Circle">
+							<mat-icon class="mat-icon-custom-size">check_circle</mat-icon>
+						  </button>
+						  <button style="margin-left: 5%;" mat-mini-fab color="primary" (click)="downloadedoc(folder)" aria-label="Preview">
+							<mat-icon>preview</mat-icon>
+						  </button>
+						  <button [disabled]="disableControls" style="margin-left: 5%;" mat-mini-fab color="primary" (click)="fileReset(folder)" aria-label="Delete">
+							<mat-icon>delete</mat-icon>
+						  </button>
+						</div>
+					  </ng-container>
+					</mat-list-item>
+				  </mat-list>
+				  
+				  <mat-card-actions style="margin-right: 62%;">
+                    <button mat-raised-button color="primary" class="primary" (click)="savedetails()" [disabled]="disableControls">SAVE</button>
+                    <button mat-raised-button color="primary" class="primary" (click)="getGenDetails()" [disabled]="disableControls">RESET</button>
+					<button mat-raised-button color="primary" class="primary" [disabled]="Submit || disableControls" (click)="submit()">SUBMIT</button>
+				</mat-card-actions>
+				<!-- <mat-list>
+					<div mat-subheader>Files uploaded</div>
+					<mat-list-item *ngFor="let folder of Uplodedfolders" class="listborder">
+					  
+					  <div matListItemLine style="width: 50%;">{{folder.docName}}</div>
+					  
+					  <div matListItemLine style="margin-right: 10%;">
+						<button mat-raised-button color="primary" class="primary"  (click)="downloadedoc(folder)">DOWNLOAD</button>
+					</div>
+					<div matListItemLine>	
+					<button mat-raised-button color="primary" class="primary"(click)="fileReset(folder)"[disabled]="disableControls">RESET</button>
+					</div>
+					
+					 
+					</mat-list-item>
+					
+				  </mat-list> -->
+			</div>
+			  
+				</mat-tab>
+				<mat-tab label="STATUS"> 
+					<ng-template mat-tab-label>
+						<mat-icon class="example-tab-icon">hourglass_empty</mat-icon>
+						Status Of Your Application
+					  </ng-template><br>
+					  <div class="progress-tab" id="progress-tab">
+						<ng-container *ngFor="let step of steps; let i = index">
+						  <div class="step" [class.active]="step.active">
+							{{ step.number }}
+						  </div>
+						  <div class="arrow" *ngIf="i < steps.length - 1"></div>
+						</ng-container>
+					  </div>
+						  <br>
+					  <table id="table" style="float: center; width: 80%; border-collapse: collapse;">
+						<tr>
+						  <th style="text-align: left; border: 1px solid black;">S.NO</th>
+						  <th style="text-align: left; border: 1px solid black;width: 30%;">STATUS</th>
+						  <th style="text-align: left; border: 1px solid black;">DATE</th>
+						 <th style="text-align: center; border: 1px solid black;">REMARKS</th>
+						</tr>
+						<tr *ngFor="let step of steps; let i = index">
+						  <td style="text-align: left; border: 1px solid black;">{{ step.number }}</td>
+						  <td style="text-align: left; border: 1px solid black;">{{ step.title }}</td>
+						  <td style="text-align: left; border: 1px solid black;">{{ step.StatusDate | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+						 <td style="text-align: center; border: 1px solid black;"></td>
+						</tr>
+					  </table>
+					  
+					  <!-- 
+						
+					  
+					
+					  
+					  <div >
+						<mat-list style="border: 1px solid #ccc; padding: 10px;" *ngFor="let step of steps; let i = index">
+						  <mat-list-item>
+							{{ step.number }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ step.title }}<br>
+						
+							Date:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ step.StatusDate | date:'dd/MM/yyyy HH:mm:ss' }}<br>
+							Remarks:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ step.Remarks }}
+						  </mat-list-item>
+						</mat-list>
+					  </div>				   -->
+
+
+						</mat-tab> 
+						<mat-tab *ngIf="enablepayment" label="PAYMENT"> 
+							<ng-template mat-tab-label>
+								<mat-icon class="example-tab-icon">payment</mat-icon>
+								Payment
+							  </ng-template><br>
+							  <table id="table" style="float: center; border:1;width: 100%;">     
+								<tr>
+									<th>S.NO</th>
+									<th>DISCRIPTION</th>
+									<th>A/C HEAD</th>
+									<th>AMOUNT(RS)</th>					
+								</tr>
+								<tr *ngFor="let report of ApplicationDetails.billPayment;let i=index;">  
+									<td style="text-align: center;">{{i+1}}</td> 
+									<td style="text-align: center;">{{report.chargeDesc}}</td>  
+									<td style="text-align: center;">{{report.acHeadCharge}}</td>  
+									<td style="text-align: center;">{{report.chargeTotalAmount}}</td> 
+								</tr>   
+								<tr>
+									<td colspan="3" style="text-align: right;color: blue;"><b>Total:</b></td>
+									<td style="text-align: center;color: blue;"><strong>{{ApplicationDetails.totalCharges}}</strong></td>
+								</tr><br>
+								<tr>
+								<td colspan="3"></td>
+									<td  style="text-align: center;color: blanchedalmond;">
+										<button mat-raised-button style="background-color: cornflowerblue;" class="primary"(click)="DownloadPayment()"><mat-icon>cloud_download</mat-icon>DownloadRecipt</button>
+										<button mat-raised-button style="background-color: cornflowerblue;" class="primary"(click)="Banklistfetch()">PayNow</button>
+										<button mat-raised-button style="background-color: cornflowerblue;" class="primary"(click)="DownloadPayedBill()"><mat-icon>cloud_download</mat-icon>DownloadPayedBill</button>
+									</td>
+								</tr>
+							</table>
+							  
+
+							  
+		
+								</mat-tab>
+								<mat-tab *ngIf="enablepayment" label="PAYMENT PROCESS" >
+									<ng-template mat-tab-label>
+									  <mat-icon class="example-tab-icon">add_card</mat-icon>
+									  Bank List
+									</ng-template>
+									<h3>Credit Options</h3>
+									<div style="display: flex; flex-wrap: wrap;width: 100%;">
+										
+									  <button mat-raised-button class="primary" (click)="paymentprocess(credits,'Credit')" style="background: aliceblue;margin: 10px;"
+									  *ngFor="let credits of Banklist.credit; let i = index;">
+										  <div style="display: flex; flex-direction: column; align-items: center;">
+											<img mat-card-image [src]="credits.image">
+											<mat-card-content>
+											  {{credits.description}}
+											</mat-card-content>
+										  </div>
+										</button>
+									 
+									 
+									</div>
+									<h3>Net Banking</h3>
+									<div style="display: flex; flex-wrap: wrap;">
+										
+										
+										  <button mat-raised-button class="primary" (click)="paymentprocess(credits,'Net')" style="background: aliceblue;margin: 10px;" 
+										  *ngFor="let credits of Banklist.net; let i = index;">
+											<div style="display: flex; flex-direction: column; align-items: center;">
+											  <img mat-card-image [src]="credits.image">
+											  <mat-card-content>
+												{{credits.description}}
+											  </mat-card-content>
+											</div>
+										  </button>
+										
+									   
+									  </div>
+									  <div style="display: flex; flex-wrap: wrap;" >
+										
+										
+										  <button mat-raised-button class="primary" (click)="paymentprocess(credits,'debit')" style="background: aliceblue; margin: 10px;"
+										  *ngFor="let credits of Banklist.debit; let i = index;">
+											<div style="display: flex; flex-direction: column; align-items: center;">
+											  <img mat-card-image [src]="credits.image">
+											  <mat-card-content>
+												{{credits.description}}
+											  </mat-card-content>
+											</div>
+										  </button>
+										
+									  </div>
+
+									  <form #paymentForm [action]="paymentUrl" method="POST" target="_blank">
+										<input type="hidden" name="param1" [value]="param1Value" />
+								        <!-- Add more hidden input fields as needed -->
+										<button *ngIf = "false" mat-raised-button class="primary" type="submit">Proceed to Payment</button>
+									</form>
+								  </mat-tab>
+								  
+								  
+								  
+
+		</mat-tab-group>
+	</mat-card>
+</div>
+
+</body>

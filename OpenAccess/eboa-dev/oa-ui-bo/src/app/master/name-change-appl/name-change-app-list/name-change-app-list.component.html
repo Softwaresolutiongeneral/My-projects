@@ -1,0 +1,141 @@
+
+<div fxLayout="row" fxLayoutWrap="wrap"></div>
+
+<div fxFlex.gt-sm="100%" fxFlex="100">
+    <mat-card>
+        <mat-card-title>
+            NAME TRANSFER APPLICATIONS LIST
+        </mat-card-title>
+
+        <mat-card-content *ngIf="!isdfcuser">
+            <mat-card-actions>
+            <div class="row1">
+                <!-- <button class="b1" (click)="sendToEdc()">ForwardToEDC</button>
+                <button class="b2" (click)="confirmInvoice()">ConfirmEDC</button> -->
+              </div>
+            </mat-card-actions>
+            
+            <div fxLayout="row" fxLayoutAlign="start center">
+    
+    
+                   <!-- Conditionally render a mat-select when edcuser is falsy -->
+                   <mat-form-field class="ml-xs mr-xs" style="width: 100%">
+                    <!-- Conditionally render a mat-select when edcuser is falsy -->
+                    <mat-select *ngIf="!edcuser" style="width: 100%;" placeholder="Edc Name" [(ngModel)]="selectedEdc">
+                      <mat-option *ngFor="let edc of orgList" [value]="edc.id">
+                        {{edc.id}} - {{ edc.name }}
+                      </mat-option>
+                    </mat-select>
+                  
+                    <!-- Conditionally render an input field when edcuser is truthy -->
+                    <input *ngIf="edcuser" matInput [(ngModel)]="edcnameid" readonly>
+                  </mat-form-field>
+                  
+  
+
+                <!-- <mat-form-field class="ml-xs mr-xs" fxFlex.gt-sm="100%">
+                    <input (keydown)="numberFormat($event)" type="text"  onKeyPress="if(this.value.length==12) return false;" matInput placeholder="Service No">
+               </mat-form-field> -->
+
+                 <!-- <mat-form-field class="ml-xs mr-xs" fxFlex.gt-sm="100%">
+                    <mat-select class="ml-xs mr-xs" style="width: 100%;" placeholder="Month" [(ngModel)]="lineMonth">
+                        <mat-option *ngFor="let month of months" [value]="month.value">
+                            {{month.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field> 
+                 <mat-form-field class="ml-xs mr-xs" fxFlex.gt-sm="100%">
+                    <mat-select class="ml-xs mr-xs" style="width: 100%;" placeholder="Year" [(ngModel)]="lineYear">
+                        <mat-option *ngFor="let year of years" [value]="year.name">
+                            {{year.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field> -->
+                <mat-form-field class="ml-xs mr-xs" fxFlex.gt-sm="100%">
+                    <mat-select *ngIf="!edcuser" class="ml-xs mr-xs" style="width: 100%;" placeholder="Status" [(ngModel)]="Status">
+                        <mat-option *ngFor="let ncess of nces" [value]="ncess.name">
+                            {{ncess.name }}
+                        </mat-option>
+                    </mat-select>
+               
+                
+                    <mat-select *ngIf="edcuser" class="ml-xs mr-xs" style="width: 100%;" placeholder="Status" [(ngModel)]="Status">
+                        <mat-option *ngFor="let ncess of edcstatus" [value]="ncess.name">
+                            {{ncess.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-card-actions class="ml-xs mr-xs" fxFlex.gt-sm="100%">
+                    <button mat-raised-button color="primary" class="primary" style="background: inherit;background-color: lightgray;"     (click)="getlist()"><mat-icon style="color: chocolate;">search</mat-icon></button>
+                </mat-card-actions>
+            </div>
+    
+        </mat-card-content>
+
+        <mat-card-content>
+
+            <ngx-datatable class="material" tabindex="index" [rows]="Applications"  [headerHeight]="50" [footerHeight]="50" [rowHeight]="50"
+             [scrollbarV]="true">
+            
+              
+              
+              <ngx-datatable-column name="S.No" [minWidth]="100">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{row.$$index + 1}}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="ServiceNo" ng-class="test" [minWidth]="100">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        {{row.serviceNo}}  
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Exsiting Company Name" [minWidth]="100">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        {{row.serviceExsitingName}}
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Flow Type" [minWidth]="100">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                              {{
+                               row.flowtype === 'STB' ? 'SaleToBoard'
+                              :(row.flowtype === 'IS-CAPTIVE' ? 'Captive'
+                              :(row.flowtype === 'THIRD-PARTY' ? 'ThirdParty' : ''))
+                              }}
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Fuel Type" [minWidth]="100">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        {{row.fuelTypeCode}}
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Status Of Application" [minWidth]="100">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        {{row.applStatus}}
+                    </ng-template>
+                </ngx-datatable-column>
+               
+             
+                <ngx-datatable-column  name="View" [minWidth]="100">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <button mat-mini-fab color="primary" (click)="applicationview(row.serviceNo)"  aria-label="Example icon button with a menu icon">
+                            <mat-icon>preview</mat-icon>
+                          </button>
+                    </ng-template>
+                </ngx-datatable-column>
+               
+            </ngx-datatable>
+
+        </mat-card-content>
+    </mat-card>
+
+</div>
+<style>
+    .select {
+    padding-left: 92%;
+}
+</style>
+             

@@ -1,0 +1,103 @@
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    
+   
+    <title>Thymeleaf HTML Template</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+        body {
+            margin: 1.5cm;
+            font-family: Arial, sans-serif;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px; /* Add margin at the bottom */
+        }
+        .logo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100px; /* Adjust the width as needed */
+        }
+        .timestamp {
+            float: right;
+        }
+        .list-container {
+            display: flex;
+            float: left;
+            justify-content: space-between;
+            list-style: none;
+            margin-bottom: 20px; /* Add margin between list and table */
+        }
+        .table {
+            clear: both; /* Clear floating elements */
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .table th {
+            background-color: #f2f2f2; /* Change to the color you want */
+        }
+        .table th, .table td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+        .footer-image {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 100px; /* Adjust the width as needed */
+        }
+        /* Adjust font size and handle overflow for h1 element */
+        .header h1 {
+            font-size: 18px; /* Change to your desired font size */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+		<span><img src="/src/main/resources/images/qrcode.jpg" alt="QrCode is not yet generated"></img></span>
+        
+        <h1>TAMIL NADU GENERATION AND DISTRIBUTION CORPORATION LIMITED</h1>
+       <span class="timestamp" th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy HH:mm')}"></span>
+    </div>
+    
+    <div class="content">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th >S.NO</th>
+                    <th>DISCRIPTION</th>
+                    <th>A/C HEAD</th>
+                    <th>AMOUNT(RS)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="item-row" th:each="namechangeapplbills,item : ${namechangeapplbill}">
+                <td th:text="${item.index+1}" style="text-align: center;"></td>
+                  <td th:text="${namechangeapplbills.ChargeDesc}"  style="text-align: center;"></td>
+                <td th:text="${namechangeapplbills.AcHeadCharge}" style="text-align: right;"></td>
+                <td th:text="${namechangeapplbills.ChargeTotalAmount}"  style="text-align: right;"></td>
+               
+            </tr>
+            
+            <tr>
+            <td colspan="3" style="text-align: right;"><b>Total:</b></td>
+            <td th:text="${billtotalamount}" style="text-align: right;"></td>
+        </tr>
+                <!-- Repeat similar rows as needed -->
+            </tbody>
+        </table>
+    </div>
+   
+</body>
+</html>
