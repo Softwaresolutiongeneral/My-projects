@@ -1,0 +1,42 @@
+  CREATE table users(id bigInt(20) not null AUTO_INCREMENT,email varchar(50),password varchar(50),username varchar(50), primary key(id));
+  
+  CREATE  table roles(id int(11) not null Auto_increment,name varchar(20),primary key(id));
+  
+ CREATE TABLE user_roles (
+  user_id BIGINT(20) NOT NULL,
+  role_id INT(11) NOT NULL,
+  PRIMARY KEY (user_id, role_id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (role_id) REFERENCES roles(id)
+);
+
+create table menu(id BIGINT(20) not null, name varchar(100),primary key(id));
+create table menufeature(id int not null auto_increment,role_id INT(11) not null,menu_id BigInt(20) not null,menu_name varchar(200),primary key (id));
+drop table menufeature;
+
+
+INSERT INTO stegith_db.roles
+(name)
+VALUES('ROLE_ADMIN');
+
+
+
+ALTER TABLE users
+ADD currentpwd varchar(255);
+
+
+
+ALTER TABLE menufeature
+ADD PRIMARY KEY (column1, column2);
+
+
+SELECT * from menufeature m where role_id =1;
+
+For Angular use node 14.20
+
+
+
+
+
+
+
